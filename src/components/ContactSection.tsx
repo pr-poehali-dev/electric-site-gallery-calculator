@@ -119,7 +119,7 @@ export default function ContactSection({
 
           <div className="grid grid-cols-3 gap-4 mt-6">
             {[
-              { icon: "Phone", label: "Телефон", val: "+7 (999) 000-00-00" },
+              { icon: "Phone", label: "Телефон", val: "8 977 123-65-70" },
               { icon: "Clock", label: "Режим", val: "Пн–Вс, 7:00–22:00" },
               { icon: "MapPin", label: "Район", val: "Москва и область" },
             ].map((item) => (
