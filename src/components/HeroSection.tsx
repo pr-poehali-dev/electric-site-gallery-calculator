@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 const HERO_IMAGE_URL =
@@ -59,6 +60,7 @@ export default function HeroSection({
   rooms,
   setRooms,
 }: HeroSectionProps) {
+  const navigate = useNavigate();
   const selectedWork = CALC_WORKS.find((w) => w.id === workType)!;
   const selectedComp = COMPLEXITY.find((c) => c.id === complexity)!;
   const price = Math.round(selectedWork.base * selectedComp.mult * rooms);
@@ -117,7 +119,26 @@ export default function HeroSection({
                 </button>
               </div>
 
-              <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-border">
+              {/* Emergency banner */}
+              <button
+                onClick={() => navigate("/emergency")}
+                className="mt-6 w-full flex items-center gap-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/40 hover:border-red-500 rounded-lg px-5 py-3.5 transition-all group"
+              >
+                <div className="relative flex-shrink-0">
+                  <div className="w-9 h-9 bg-red-500/20 rounded-full flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
+                    <Icon name="Siren" size={18} className="text-red-500" />
+                  </div>
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping opacity-75" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full" />
+                </div>
+                <div className="flex-1 text-left">
+                  <div className="text-sm font-oswald font-semibold text-red-400 tracking-wide">ЭКСТРЕННЫЙ ВЫЕЗД</div>
+                  <div className="text-xs text-muted-foreground font-ibm">В течение 30 минут · от 1 500 ₽</div>
+                </div>
+                <Icon name="ArrowRight" size={16} className="text-red-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <div className="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-border">
                 {[["10+", "Лет опыта"], ["500+", "Объектов"], ["100%", "Гарантия"]].map(([num, label]) => (
                   <div key={label}>
                     <div className="font-oswald text-2xl font-bold text-primary">{num}</div>
