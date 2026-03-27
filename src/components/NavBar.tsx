@@ -31,13 +31,21 @@ export default function NavBar({ navOpen, setNavOpen, scrollTo }: NavBarProps) {
           ))}
         </nav>
 
-        <button
-          onClick={() => scrollTo("contact")}
-          className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm font-ibm px-4 py-2 rounded transition-all"
-        >
-          <Icon name="Phone" size={14} />
-          Вызвать
-        </button>
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="tel:89771236570"
+            className="flex items-center gap-2 border border-border hover:border-primary text-muted-foreground hover:text-primary text-sm font-ibm px-4 py-2 rounded transition-all"
+          >
+            <Icon name="Phone" size={14} />
+            8 977 123-65-70
+          </a>
+          <button
+            onClick={() => scrollTo("contact")}
+            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm font-ibm px-4 py-2 rounded transition-all"
+          >
+            Вызвать
+          </button>
+        </div>
 
         <button className="md:hidden text-foreground" onClick={() => setNavOpen(!navOpen)}>
           <Icon name={navOpen ? "X" : "Menu"} size={22} />
