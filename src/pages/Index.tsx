@@ -65,6 +65,33 @@ export default function Index() {
   const [navOpen, setNavOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
+  const [formName, setFormName] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formDesc, setFormDesc] = useState("");
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
+
+  const handleSubmit = async () => {
+    if (!formName.trim() || !formPhone.trim()) return;
+    setFormStatus("sending");
+    try {
+      const res = await fetch("https://functions.poehali.dev/fa049e60-e899-4478-83a0-e4e1decacdc7", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: formName, phone: formPhone, description: formDesc }),
+      });
+      if (res.ok) {
+        setFormStatus("ok");
+        setFormName("");
+        setFormPhone("");
+        setFormDesc("");
+      } else {
+        setFormStatus("err");
+      }
+    } catch {
+      setFormStatus("err");
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
@@ -437,36 +464,81 @@ export default function Index() {
           </div>
 
           <div className="bg-card border border-border rounded-lg p-8">
-            <div className="grid md:grid-cols-2 gap-5 mb-5">
-              <div>
-                <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Ваше имя</label>
-                <input
-                  type="text"
-                  placeholder="Иван Иванов"
-                  className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-                />
+            {formStatus === "ok" ? (
+              <div className="flex flex-col items-center justify-center py-10 gap-4">
+                <div className="w-14 h-14 bg-primary/15 rounded-full flex items-center justify-center">
+                  <Icon name="CheckCircle" size={28} className="text-primary" />
+                </div>
+                <div className="text-center">
+                  <div className="font-oswald text-2xl font-bold text-foreground mb-1">Заявка отправлена!</div>
+                  <div className="text-muted-foreground font-ibm text-sm">Перезвоню вам в течение 15 минут</div>
+                </div>
+                <button
+                  onClick={() => setFormStatus("idle")}
+                  className="text-xs text-primary font-ibm hover:underline mt-2"
+                >
+                  Отправить ещё одну
+                </button>
               </div>
-              <div>
-                <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Телефон</label>
-                <input
-                  type="tel"
-                  placeholder="+7 (999) 000-00-00"
-                  className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-            </div>
-            <div className="mb-5">
-              <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Описание задачи</label>
-              <textarea
-                rows={4}
-                placeholder="Опишите, что нужно сделать..."
-                className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors resize-none"
-              />
-            </div>
-            <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-ibm font-medium py-3.5 rounded transition-all hover:scale-[1.01]">
-              <Icon name="Send" size={16} />
-              Отправить заявку
-            </button>
+            ) : (
+              <>
+                <div className="grid md:grid-cols-2 gap-5 mb-5">
+                  <div>
+                    <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Ваше имя</label>
+                    <input
+                      type="text"
+                      placeholder="Иван Иванов"
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Телефон</label>
+                    <input
+                      type="tel"
+                      placeholder="+7 (999) 000-00-00"
+                      value={formPhone}
+                      onChange={(e) => setFormPhone(e.target.value)}
+                      className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                    />
+                  </div>
+                </div>
+                <div className="mb-5">
+                  <label className="block text-xs text-muted-foreground font-ibm mb-2 uppercase tracking-wider">Описание задачи</label>
+                  <textarea
+                    rows={4}
+                    placeholder="Опишите, что нужно сделать..."
+                    value={formDesc}
+                    onChange={(e) => setFormDesc(e.target.value)}
+                    className="w-full bg-background border border-border rounded px-4 py-3 text-sm font-ibm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors resize-none"
+                  />
+                </div>
+                {formStatus === "err" && (
+                  <div className="mb-4 flex items-center gap-2 text-sm text-red-400 font-ibm">
+                    <Icon name="AlertCircle" size={14} />
+                    Ошибка отправки. Попробуйте ещё раз.
+                  </div>
+                )}
+                <button
+                  onClick={handleSubmit}
+                  disabled={formStatus === "sending" || !formName.trim() || !formPhone.trim()}
+                  className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-ibm font-medium py-3.5 rounded transition-all hover:scale-[1.01]"
+                >
+                  {formStatus === "sending" ? (
+                    <>
+                      <Icon name="Loader" size={16} className="animate-spin" />
+                      Отправляю...
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="Send" size={16} />
+                      Отправить заявку
+                    </>
+                  )}
+                </button>
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-3 gap-4 mt-6">
