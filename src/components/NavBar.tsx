@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 interface NavBarProps {
@@ -7,6 +8,7 @@ interface NavBarProps {
 }
 
 export default function NavBar({ navOpen, setNavOpen, scrollTo }: NavBarProps) {
+  const navigate = useNavigate();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -29,6 +31,13 @@ export default function NavBar({ navOpen, setNavOpen, scrollTo }: NavBarProps) {
               {label}
             </button>
           ))}
+          <button
+            onClick={() => navigate("/emergency")}
+            className="text-sm font-ibm text-red-500 hover:text-red-400 transition-colors tracking-wide flex items-center gap-1"
+          >
+            <Icon name="Siren" size={14} />
+            Экстренный выезд
+          </button>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -59,6 +68,13 @@ export default function NavBar({ navOpen, setNavOpen, scrollTo }: NavBarProps) {
               {label}
             </button>
           ))}
+          <button
+            onClick={() => navigate("/emergency")}
+            className="text-left text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1"
+          >
+            <Icon name="Siren" size={14} />
+            Экстренный выезд
+          </button>
         </div>
       )}
     </header>
