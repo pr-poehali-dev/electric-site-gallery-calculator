@@ -121,7 +121,7 @@ export default function ContactSection({
             {[
               { icon: "Phone", label: "Телефон", val: "8 977 123-65-70" },
               { icon: "Clock", label: "Режим", val: "Пн–Вс, 7:00–22:00" },
-              { icon: "MapPin", label: "Район", val: "Москва и область" },
+              { icon: "MapPin", label: "Район", val: "Пенза и область" },
             ].map((item) => (
               <div key={item.label} className="bg-card border border-border rounded p-4 text-center">
                 <Icon name={item.icon as "Phone"} size={20} className="text-primary mx-auto mb-2" />
