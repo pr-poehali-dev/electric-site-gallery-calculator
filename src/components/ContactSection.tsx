@@ -120,7 +120,7 @@ export default function ContactSection({
           <div className="grid grid-cols-3 gap-4 mt-6">
             {[
               { icon: "Phone", label: "Телефон", val: "8 977 123-65-70" },
-              { icon: "Clock", label: "Режим", val: "Пн–Вс, 7:00–22:00" },
+              { icon: "Clock", label: "Режим", val: "Пн–Вс, 8:00–20:00" },
               { icon: "MapPin", label: "Район", val: "Пенза и область" },
             ].map((item) => (
               <div key={item.label} className="bg-card border border-border rounded p-4 text-center">
